@@ -31,20 +31,20 @@ if (!Object.create) {
                 "Object.create polyfill only accepts the first parameter"
             );
         }
-        var tmp = function () {};
+        let tmp = function () {};
         tmp.prototype = o;
         return new tmp();
     };
 }
 
-var DATATYPES = false;
-var LOCALE = {};
-var SQL = {
+let DATATYPES = false;
+let LOCALE = {};
+let SQL = {
     _subscribers: {},
 
     publish: function (message, publisher, data) {
-        var subscribers = this._subscribers[message] || [];
-        var obj = {
+        let subscribers = this._subscribers[message] || [];
+        let obj = {
             target: publisher,
             data: data,
         };
@@ -57,14 +57,14 @@ var SQL = {
         if (!(message in this._subscribers)) {
             this._subscribers[message] = [];
         }
-        var index = this._subscribers[message].indexOf(subscriber);
+        let index = this._subscribers[message].indexOf(subscriber);
         if (index == -1) {
             this._subscribers[message].push(subscriber);
         }
     },
 
     unsubscribe: function (message, subscriber) {
-        var index = this._subscribers[message].indexOf(subscriber);
+        let index = this._subscribers[message].indexOf(subscriber);
         if (index > -1) {
             this._subscribers[message].splice(index, 1);
         }
