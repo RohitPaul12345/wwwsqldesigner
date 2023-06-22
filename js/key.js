@@ -21,7 +21,7 @@ SQL.Key.prototype.setType = function (t) {
         return;
     }
     this.type = t;
-    for (var i = 0; i < this.rows.length; i++) {
+    for (let i = 0; i < this.rows.length; i++) {
         this.rows[i].redraw();
     }
 };
@@ -39,7 +39,7 @@ SQL.Key.prototype.addRow = function (r) {
 };
 
 SQL.Key.prototype.removeRow = function (r) {
-    var idx = this.rows.indexOf(r);
+    let idx = this.rows.indexOf(r);
     if (idx == -1) {
         return;
     }
@@ -48,7 +48,7 @@ SQL.Key.prototype.removeRow = function (r) {
 };
 
 SQL.Key.prototype.destroy = function () {
-    for (var i = 0; i < this.rows.length; i++) {
+    for (let i = 0; i < this.rows.length; i++) {
         this.rows[i].removeKey(this);
     }
 };
@@ -61,8 +61,8 @@ SQL.Key.prototype.toXML = function () {
     var xml = "";
     xml +=
         '<key type="' + this.getType() + '" name="' + this.getName() + '">\n';
-    for (var i = 0; i < this.rows.length; i++) {
-        var r = this.rows[i];
+    for (let i = 0; i < this.rows.length; i++) {
+        let r = this.rows[i];
         xml += "<part>" + r.getTitle() + "</part>\n";
     }
     xml += "</key>\n";
@@ -72,10 +72,10 @@ SQL.Key.prototype.toXML = function () {
 SQL.Key.prototype.fromXML = function (node) {
     this.setType(node.getAttribute("type"));
     this.setName(node.getAttribute("name"));
-    var parts = node.getElementsByTagName("part");
+    let parts = node.getElementsByTagName("part");
     for (var i = 0; i < parts.length; i++) {
-        var name = parts[i].firstChild.nodeValue;
-        var row = this.owner.findNamedRow(name);
+        let name = parts[i].firstChild.nodeValue;
+        let row = this.owner.findNamedRow(name);
         this.addRow(row);
     }
 };
