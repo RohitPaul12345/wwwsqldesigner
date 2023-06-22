@@ -1,5 +1,5 @@
 /* (c) 2007 - now() Ondrej Zara, 1.7 */
-var OZ = {
+let OZ = {
     $: function (x) {
         return typeof x == "string" ? document.getElementById(x) : x;
     },
@@ -18,18 +18,18 @@ var OZ = {
         _byName: {},
         _byID: {},
         add: function (elm, event, cb) {
-            var id = OZ.Event._id++;
-            var element = OZ.$(elm);
-            var fnc =
+            let id = OZ.Event._id++;
+            let element = OZ.$(elm);
+            let fnc =
                 element && element.attachEvent
                     ? function () {
                           return cb.apply(element, arguments);
                       }
                     : cb;
-            var rec = [element, event, fnc];
-            var parts = event.split(" ");
+            let rec = [element, event, fnc];
+            let parts = event.split(" ");
             while (parts.length) {
-                var e = parts.pop();
+                let e = parts.pop();
                 if (element) {
                     if (element.addEventListener) {
                         element.addEventListener(e, fnc, false);
@@ -46,14 +46,14 @@ var OZ = {
             return id;
         },
         remove: function (id) {
-            var rec = OZ.Event._byID[id];
+            let rec = OZ.Event._byID[id];
             if (!rec) {
                 return;
             }
-            var elm = rec[0];
-            var parts = rec[1].split(" ");
+            let elm = rec[0];
+            let parts = rec[1].split(" ");
             while (parts.length) {
-                var e = parts.pop();
+                let e = parts.pop();
                 if (elm) {
                     if (elm.removeEventListener) {
                         elm.removeEventListener(e, rec[2], false);
@@ -76,20 +76,20 @@ var OZ = {
         },
     },
     Class: function () {
-        var c = function () {
-            var init = arguments.callee.prototype.init;
+        let c = function () {
+            let init = arguments.callee.prototype.init;
             if (init) {
                 init.apply(this, arguments);
             }
         };
         c.implement = function (parent) {
-            for (var p in parent.prototype) {
+            for (let p in parent.prototype) {
                 this.prototype[p] = parent.prototype[p];
             }
             return this;
         };
         c.extend = function (parent) {
-            var tmp = function () {};
+            let tmp = function () {};
             tmp.prototype = parent.prototype;
             this.prototype = new tmp();
             this.prototype.constructor = this;
@@ -99,22 +99,22 @@ var OZ = {
             return fnc.bind(this);
         };
         c.prototype.dispatch = function (type, data) {
-            var obj = {
+            let obj = {
                 type: type,
                 target: this,
                 timeStamp: new Date().getTime(),
                 data: data,
             };
-            var tocall = [];
-            var list = OZ.Event._byName[type];
-            for (var id in list) {
-                var item = list[id];
+            let tocall = [];
+            let list = OZ.Event._byName[type];
+            for (let id in list) {
+                let item = list[id];
                 if (!item[0] || item[0] == this) {
                     tocall.push(item[2]);
                 }
             }
-            var len = tocall.length;
-            for (var i = 0; i < len; i++) {
+            let len = tocall.length;
+            for (let i = 0; i < len; i++) {
                 tocall[i](obj);
             }
         };
@@ -122,9 +122,9 @@ var OZ = {
     },
     DOM: {
         elm: function (name, opts) {
-            var elm = document.createElement(name);
-            for (var p in opts) {
-                var val = opts[p];
+            let elm = document.createElement(name);
+            for (let p in opts) {
+                let val = opts[p];
                 if (p == "class") {
                     p = "className";
                 }
@@ -145,10 +145,10 @@ var OZ = {
         },
         pos: function (elm) {
             /* relative to _viewport_ */
-            var cur = OZ.$(elm);
-            var html = cur.ownerDocument.documentElement;
-            var parent = cur.parentNode;
-            var x = (y = 0);
+            let cur = OZ.$(elm);
+            let html = cur.ownerDocument.documentElement;
+            let parent = cur.parentNode;
+            let x = (y = 0);
             if (cur == html) {
                 return [x, y];
             }
@@ -180,11 +180,11 @@ var OZ = {
             }
         },
         scroll: function () {
-            var x =
+            let x =
                 document.documentElement.scrollLeft ||
                 document.body.scrollLeft ||
                 0;
-            var y =
+            let y =
                 document.documentElement.scrollTop ||
                 document.body.scrollTop ||
                 0;
@@ -199,16 +199,16 @@ var OZ = {
                   ];
         },
         hasClass: function (node, className) {
-            var cn = OZ.$(node).className;
-            var arr = cn ? cn.split(" ") : [];
+            let cn = OZ.$(node).className;
+            let arr = cn ? cn.split(" ") : [];
             return arr.indexOf(className) != -1;
         },
         addClass: function (node, className) {
             if (OZ.DOM.hasClass(node, className)) {
                 return;
             }
-            var cn = OZ.$(node).className;
-            var arr = cn ? cn.split(" ") : [];
+            let cn = OZ.$(node).className;
+            let arr = cn ? cn.split(" ") : [];
             arr.push(className);
             OZ.$(node).className = arr.join(" ");
         },
@@ -216,22 +216,22 @@ var OZ = {
             if (!OZ.DOM.hasClass(node, className)) {
                 return;
             }
-            var cn = OZ.$(node).className;
-            var arr = cn ? cn.split(" ") : [];
-            var arr = arr.filter(function ($) {
+            let cn = OZ.$(node).className;
+            let arr = cn ? cn.split(" ") : [];
+            let arr = arr.filter(function ($) {
                 return $ != className;
             });
             OZ.$(node).className = arr.join(" ");
         },
         append: function () {
             if (arguments.length == 1) {
-                var arr = arguments[0];
-                var root = OZ.$(arr[0]);
-                for (var i = 1; i < arr.length; i++) {
+                let arr = arguments[0];
+                let root = OZ.$(arr[0]);
+                for (let i = 1; i < arr.length; i++) {
                     root.appendChild(OZ.$(arr[i]));
                 }
             } else
-                for (var i = 0; i < arguments.length; i++) {
+                for (let i = 0; i < arguments.length; i++) {
                     OZ.DOM.append(arguments[i]);
                 }
         },
@@ -256,8 +256,8 @@ var OZ = {
             }
         },
         set: function (elm, obj) {
-            for (var p in obj) {
-                var val = obj[p];
+            for (let p in obj) {
+                let val = obj[p];
                 if (p == "opacity" && OZ.ie) {
                     p = "filter";
                     val = "alpha(opacity=" + Math.round(100 * val) + ")";
@@ -272,13 +272,13 @@ var OZ = {
         },
     },
     Request: function (url, callback, options) {
-        var o = { data: false, method: "get", headers: {}, xml: false };
-        for (var p in options) {
+        let o = { data: false, method: "get", headers: {}, xml: false };
+        for (let p in options) {
             o[p] = options[p];
         }
         o.method = o.method.toUpperCase();
 
-        var xhr = false;
+        let xhr = false;
         if (window.XMLHttpRequest) {
             xhr = new XMLHttpRequest();
         } else if (window.ActiveXObject) {
@@ -294,14 +294,14 @@ var OZ = {
             if (!callback) {
                 return;
             }
-            var data = o.xml ? xhr.responseXML : xhr.responseText;
-            var headers = {};
-            var h = xhr.getAllResponseHeaders();
+            let data = o.xml ? xhr.responseXML : xhr.responseText;
+            let headers = {};
+            let h = xhr.getAllResponseHeaders();
             if (h) {
                 h = h.split(/[\r\n]/);
-                for (var i = 0; i < h.length; i++)
+                for (let i = 0; i < h.length; i++)
                     if (h[i]) {
-                        var v = h[i].match(/^([^:]+): *(.*)$/);
+                        let v = h[i].match(/^([^:]+): *(.*)$/);
                         headers[v[1]] = v[2];
                     }
             }
@@ -313,7 +313,7 @@ var OZ = {
                 "application/x-www-form-urlencoded"
             );
         }
-        for (var p in o.headers) {
+        for (let p in o.headers) {
             xhr.setRequestHeader(p, o.headers[p]);
         }
         xhr.send(o.data || null);
@@ -323,8 +323,8 @@ var OZ = {
 
 if (!Function.prototype.bind) {
     Function.prototype.bind = function (thisObj) {
-        var fn = this;
-        var args = Array.prototype.slice.call(arguments, 1);
+        let fn = this;
+        let args = Array.prototype.slice.call(arguments, 1);
         return function () {
             return fn.apply(
                 thisObj,
@@ -336,8 +336,8 @@ if (!Function.prototype.bind) {
 
 if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function (item, from) {
-        var len = this.length;
-        var i = from || 0;
+        let len = this.length;
+        let i = from || 0;
         if (i < 0) {
             i += len;
         }
@@ -357,8 +357,8 @@ if (!Array.indexOf) {
 
 if (!Array.prototype.lastIndexOf) {
     Array.prototype.lastIndexOf = function (item, from) {
-        var len = this.length;
-        var i = from || len - 1;
+        let len = this.length;
+        let i = from || len - 1;
         if (i < 0) {
             i += len;
         }
@@ -378,8 +378,8 @@ if (!Array.lastIndexOf) {
 
 if (!Array.prototype.forEach) {
     Array.prototype.forEach = function (cb, _this) {
-        var len = this.length;
-        for (var i = 0; i < len; i++) {
+        let len = this.length;
+        for (let i = 0; i < len; i++) {
             if (i in this) {
                 cb.call(_this, this[i], i, this);
             }
@@ -394,8 +394,8 @@ if (!Array.forEach) {
 
 if (!Array.prototype.every) {
     Array.prototype.every = function (cb, _this) {
-        var len = this.length;
-        for (var i = 0; i < len; i++) {
+        let len = this.length;
+        for (let i = 0; i < len; i++) {
             if (i in this && !cb.call(_this, this[i], i, this)) {
                 return false;
             }
@@ -411,8 +411,8 @@ if (!Array.every) {
 
 if (!Array.prototype.some) {
     Array.prototype.some = function (cb, _this) {
-        var len = this.length;
-        for (var i = 0; i < len; i++) {
+        let len = this.length;
+        for (let i = 0; i < len; i++) {
             if (i in this && cb.call(_this, this[i], i, this)) {
                 return true;
             }
@@ -428,9 +428,9 @@ if (!Array.some) {
 
 if (!Array.prototype.map) {
     Array.prototype.map = function (cb, _this) {
-        var len = this.length;
-        var res = new Array(len);
-        for (var i = 0; i < len; i++) {
+        let len = this.length;
+        let res = new Array(len);
+        for (let i = 0; i < len; i++) {
             if (i in this) {
                 res[i] = cb.call(_this, this[i], i, this);
             }
@@ -446,11 +446,11 @@ if (!Array.map) {
 
 if (!Array.prototype.filter) {
     Array.prototype.filter = function (cb, _this) {
-        var len = this.length;
-        var res = [];
-        for (var i = 0; i < len; i++) {
+        let len = this.length;
+        let res = [];
+        for (let i = 0; i < len; i++) {
             if (i in this) {
-                var val = this[i];
+                let val = this[i];
                 if (cb.call(_this, val, i, this)) {
                     res.push(val);
                 }
